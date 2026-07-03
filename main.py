@@ -23,6 +23,7 @@ html_output = """<!DOCTYPE html>
     <header>
         <h1>Champions League of Legends</h1>
     </header>
+    <main>
 """
 
 # PAGE LISTE
@@ -103,6 +104,7 @@ html_output += """
         </div>
     </div>
 </div>
+</main>
 </body>
 </html>
 """

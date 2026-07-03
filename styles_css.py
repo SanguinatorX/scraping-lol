@@ -7,7 +7,9 @@ css = """
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: radial-gradient(circle at top, #1d3557, #091428 50%, #010a13 100%);
         color: #f0e6d2;
+    }
 
+    main {
         display: grid;
         grid-template-columns: repeat(5, minmax(200px, 1fr));
         justify-items: center;
@@ -54,7 +56,7 @@ css = """
         font-family: 'Cinzel', serif;
         color: #c8aa6e;
         margin-top: 12px;
-        font-size: 16px;
+        font-size: 13px;
         text-transform: uppercase;
         letter-spacing: 2px;
         text-align: center;
@@ -80,6 +82,7 @@ css = """
         height: 100%;
         padding: 60px;
         box-sizing: border-box;
+        font-size: 1.3em;
 
         display: flex;
         flex-direction: column;
@@ -93,7 +96,6 @@ css = """
     .modal-header h2 {
         font-family: 'Cinzel', serif;
         color: #c8aa6e;
-        font-size: 42px;
         text-transform: uppercase;
         letter-spacing: 4px;
         margin-bottom: 30px;
@@ -108,8 +110,7 @@ css = """
 
     .modal-left {
         flex: 1;
-        font-size: 16px;
-        line-height: 1.7;
+        line-height: 1.5;
         text-align: justify;
     }
 
@@ -160,7 +161,7 @@ css = """
         }
 
         .modal-header h2 {
-            font-size: 30px;
+            font-size: 28px;
         }
     }
 """
