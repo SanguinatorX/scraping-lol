@@ -9,16 +9,110 @@ css = """
         color: #f0e6d2;
     }
 
-    header {
-        text-align: center;
-        margin-bottom: 24px;
-    }
-
     main {
         display: grid;
         grid-template-columns: repeat(5, minmax(200px, 1fr));
         justify-items: center;
         gap: 25px;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 20px 10px;
+
+        background: linear-gradient(90deg, rgba(10,20,35,0.8), rgba(20,30,50,0.6), rgba(10,20,35,0.8));
+        border-bottom: 1px solid #c8aa6e;
+
+        box-shadow: 0 8px 20px rgba(0,0,0,.4);
+    }
+
+    header h1 {
+        font-family: 'Cinzel', serif;
+        color: #c8aa6e;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    header p {
+        color: #f0e6d2;
+        opacity: 0.8;
+        font-size: 14px;
+    }
+
+    #search {
+        width: 70%;
+        max-width: 600px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+
+        margin: 30px auto;
+        padding: 20px;
+
+        background: rgba(10, 20, 35, 0.6);
+        border: 1px solid #c8aa6e;
+        border-radius: 12px;
+
+        box-shadow: 0 10px 30px rgba(0,0,0,.5);
+        backdrop-filter: blur(8px);
+    }
+
+    #search label {
+        font-family: 'Cinzel', serif;
+        color: #c8aa6e;
+        letter-spacing: 1px;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    #searcher {
+        width: 280px;
+        padding: 10px 14px;
+
+        border-radius: 8px;
+        border: 1px solid #c8aa6e;
+
+        background: rgba(255,255,255,0.9);
+        color: #091428;
+
+        outline: none;
+
+        transition: 0.2s ease;
+    }
+
+    #searcher:focus {
+        transform: scale(1.03);
+        box-shadow: 0 0 12px rgba(200,170,110,.6);
+        border-color: #fff;
+    }
+
+    #submitter {
+        padding: 10px 18px;
+        width: 40%;
+        min-width: 50px;
+        border-radius: 10px;
+        border: 1px solid #c8aa6e;
+
+        background: linear-gradient(135deg, #c8aa6e, #8a6f3b);
+        color: #091428;
+
+        font-weight: bold;
+        cursor: pointer;
+
+        transition: 0.2s ease;
+    }
+
+    #submitter:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(0,0,0,.5);
+    }
+
+    #submitter:active {
+        transform: translateY(0px);
     }
 
     /* CARD CHAMPION */

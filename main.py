@@ -23,7 +23,14 @@ html_output = """<!DOCTYPE html>
 <body>
 <header>
     <h1>Champions League of Legends</h1>
+    <p>Ici vous trouverez tous les personnages (champions) du jeu League of Legends</p>
 </header>
+<div id="search">
+    <label for="searcher">Saississez le nom du champion :</label>
+    <br />
+    <input id="searcher" placeholder="Nom du champion" type="text" />
+    <button id="submitter">Chercher</button>
+</div>
 <main>
 """
 
