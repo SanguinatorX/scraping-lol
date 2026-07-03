@@ -9,6 +9,11 @@ css = """
         color: #f0e6d2;
     }
 
+    header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
     main {
         display: grid;
         grid-template-columns: repeat(5, minmax(200px, 1fr));
@@ -56,10 +61,16 @@ css = """
         font-family: 'Cinzel', serif;
         color: #c8aa6e;
         margin-top: 12px;
-        font-size: 13px;
+        font-size: 16px;
         text-transform: uppercase;
         letter-spacing: 2px;
         text-align: center;
+    }
+
+    .role-badge {
+        font-family: 'Cinzel', serif;
+        text-align: center;
+        font-size: 12px;
     }
 
     /* MODAL */
@@ -99,6 +110,7 @@ css = """
         text-transform: uppercase;
         letter-spacing: 4px;
         margin-bottom: 30px;
+        text-align: left;
     }
 
     .modal-body {

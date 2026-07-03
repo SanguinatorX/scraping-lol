@@ -1,4 +1,3 @@
-import re
 import requests
 import shutil
 from bs4 import BeautifulSoup
@@ -8,6 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 from styles_css import css
 
 BASE_URL = "https://www.leagueoflegends.com"
+DD_BASE = "https://ddragon.leagueoflegends.com"
+
 session = requests.Session()
 
 html_output = """<!DOCTYPE html>
@@ -20,15 +21,18 @@ html_output = """<!DOCTYPE html>
     <script src='script.js' defer></script>
 </head>
 <body>
-    <header>
-        <h1>Champions League of Legends</h1>
-    </header>
-    <main>
+<header>
+    <h1>Champions League of Legends</h1>
+</header>
+<main>
 """
 
-# PAGE LISTE
-reponse = requests.get(f"{BASE_URL}/fr-fr/champions/")
-reponse.encoding = 'utf-8'
+# 🔥 DATA DRAGON (source stable, pas Riot HTML fragile)
+DD_VERSION = "14.1.1"  # tu peux update si besoin
+champion_json = session.get(
+    f"https://ddragon.leagueoflegends.com/cdn/{DD_VERSION}/data/fr_FR/champion.json"
+).json()["data"]
+
 
 def fetch_champion(lien):
     nom = lien.get("aria-label")
@@ -37,37 +41,43 @@ def fetch_champion(lien):
     if not nom or not href:
         return None
 
-    nom_propre = nom.replace(" ", "").replace("'", "").capitalize()
-    img_url = f"https://ddragon.leagueoflegends.com/cdn/img/champion/splash/{nom_propre}_0.jpg"
+    # nom normalisé
+    key = None
+    for k, v in champion_json.items():
+        if v["name"].lower() == nom.lower():
+            key = k
+            break
 
-    description = "Description introuvable."
+    if not key:
+        return None
 
-    champ_page = session.get(f"{BASE_URL}{href}")
-    champ_page.encoding = 'utf-8'
+    champ_data = champion_json[key]
 
-    if champ_page.status_code == 200:
-        champ_soup = BeautifulSoup(champ_page.text, "html.parser")
-        script_data = champ_soup.find("script", id="__NEXT_DATA__")
+    img_url = f"{DD_BASE}/cdn/img/champion/splash/{key}_0.jpg"
 
-        if script_data:
-            match = re.search(
-                r'"description":\{"type":"html","body":"(.*?)"\}',
-                script_data.string
-            )
-            if match:
-                description = match.group(1).replace("\\n", "<br>").replace('\\"', '"')
+    description = champ_data.get("blurb", "Description introuvable.")
+    roles = champ_data.get("tags", [])
 
-    description_secu = description.replace("'", "&#39;")
     nom_secu = nom.replace("'", "&#39;")
-    print(nom_propre)
+    description_secu = description.replace("'", "&#39;")
+    roles_str = ", ".join(roles) if roles else "unknown"
 
-    return nom_secu, img_url, description_secu
+    print(f"[OK] {nom}")
 
+    return nom_secu, img_url, description_secu, roles_str
+
+
+# 🌐 LISTE CHAMPIONS (juste pour les noms + liens)
+reponse = session.get(f"{BASE_URL}/fr-fr/champions/")
+reponse.encoding = "utf-8"
 
 if reponse.status_code == 200:
-    liens_champions = BeautifulSoup(reponse.text, "html.parser").find_all(
-        "a", href=lambda h: h and "/champions/" in h
-    )
+    soup = BeautifulSoup(reponse.text, "html.parser")
+
+    liens_champions = [
+        a for a in soup.find_all("a")
+        if a.get("aria-label") and a.get("href") and "/champions/" in a.get("href")
+    ]
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         results = executor.map(fetch_champion, liens_champions)
@@ -76,39 +86,48 @@ if reponse.status_code == 200:
             if not result:
                 continue
 
-            nom_secu, img_url, description_secu = result
+            nom_secu, img_url, description_secu, roles_str = result
 
             html_output += f"""
-<div class='champion-item' data-name='{nom_secu}' data-img='{img_url}' data-desc='{description_secu}'>
-  <hover-tilt shadow shadow-blur='40' scale-factor='1.25' glare-intensity='1.8'>
+<div class='champion-item'
+     data-name='{nom_secu}'
+     data-img='{img_url}'
+     data-desc='{description_secu}'
+     data-roles='{roles_str}'>
+
+  <hover-tilt shadow shadow-blur='40' scale-factor='1.15' glare-intensity='1.2'>
     <img src='{img_url}' alt='{nom_secu}' class='champion-img'>
   </hover-tilt>
+
   <h2 class='champion-name'>{nom_secu}</h2>
+  <span class='role-badge'>{roles_str}</span>
 </div>
 """
 
+# 🪟 MODAL
 html_output += """
 <div id="champion-modal" class="modal">
     <div class="modal-content">
         <span id="close-modal" class="close-btn">&times;</span>
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2 id="modal-name">Nom</h2>
-            </div>
-            <div class="modal-body">
-                <div id="modal-desc" class="modal-left">Description</div>
-                <div class="modal-right">
-                    <img id="modal-img" src="" alt="">
-                </div>
+
+        <div class="modal-header">
+            <h2 id="modal-name">Nom</h2>
+        </div>
+        <div class="modal-body">
+            <div id="modal-desc" class="modal-left"></div>
+            <div class="modal-right">
+                <img id="modal-img" src="" alt="">
             </div>
         </div>
     </div>
 </div>
+
 </main>
 </body>
 </html>
 """
 
+# 💾 EXPORT
 front_end = Path("front-end")
 front_end.mkdir(exist_ok=True)
 
