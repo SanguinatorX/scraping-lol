@@ -59,7 +59,11 @@ cd scraping-lol
 Installe ensuite les dépendances :
 
 ```bash
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
+```
+ou
+```
+pip3 install -r requirements.txt
 ```
 
 ---
@@ -69,7 +73,7 @@ pip install -r requirements.txt
 Exécute simplement :
 
 ```bash
-python main.py
+python3 lol-scrap.py
 ```
 
 Le script :
