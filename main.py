@@ -14,12 +14,15 @@ html_output = """<!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>LoL</title>
+    <title>League of Legends champions</title>
     <link rel='stylesheet' href='styles.css'>
     <script type="module" src="https://cdn.jsdelivr.net/npm/hover-tilt/dist/hover-tilt.js"></script>
     <script src='script.js' defer></script>
 </head>
 <body>
+    <header>
+        <h1>Champions League of Legends</h1>
+    </header>
 """
 
 # PAGE LISTE
