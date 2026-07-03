@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-from styles_css import css
-
 BASE_URL = "https://www.leagueoflegends.com"
 DD_BASE = "https://ddragon.leagueoflegends.com"
 
@@ -22,14 +20,19 @@ html_output = """<!DOCTYPE html>
 </head>
 <body>
 <header>
-    <h1>Champions League of Legends</h1>
-    <p>Ici vous trouverez tous les personnages (champions) du jeu League of Legends</p>
+    <img src="lol-logo.png" alt="LoL logo">
+
+    <div class="header-text">
+        <h1>Champions League of Legends</h1>
+        <p>Ici vous trouverez tous les personnages (champions) du jeu League of Legends</p>
+    </div>
+
+    <img src="lol-logo.png" alt="LoL logo">
 </header>
 <div id="search">
     <label for="searcher">Saississez le nom du champion :</label>
     <br />
     <input id="searcher" placeholder="Nom du champion" type="text" />
-    <button id="submitter">Chercher</button>
 </div>
 <main>
 """
@@ -139,6 +142,6 @@ front_end = Path("front-end")
 front_end.mkdir(exist_ok=True)
 
 (front_end / "champions.html").write_text(html_output, encoding="utf-8")
-(front_end / "styles.css").write_text(css, encoding="utf-8")
-
 shutil.copy2("script.js", front_end / "script.js")
+shutil.copy2("styles.css", front_end / "styles.css")
+shutil.copy2("lol-logo.png", front_end / "lol-logo.png")

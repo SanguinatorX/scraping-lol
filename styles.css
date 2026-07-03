@@ -1,5 +1,4 @@
-css = """
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
 
     body {
         margin: 0;
@@ -17,28 +16,45 @@ css = """
     }
 
     header {
-        text-align: center;
-        margin-bottom: 20px;
-        padding: 20px 10px;
+        display: grid;
+        grid-template-columns: 80px 1fr 80px;
+        align-items: center;
 
-        background: linear-gradient(90deg, rgba(10,20,35,0.8), rgba(20,30,50,0.6), rgba(10,20,35,0.8));
+        padding: 20px;
+        margin-bottom: 30px;
+        background: linear-gradient(90deg, rgba(10,20,35,0.85), rgba(20,30,50,0.65), rgba(10,20,35,0.85));
         border-bottom: 1px solid #c8aa6e;
+        box-shadow: 0 10px 25px rgba(0,0,0,.5);
+        text-align: center;
+    }
 
-        box-shadow: 0 8px 20px rgba(0,0,0,.4);
+    header img {
+        width: 150px;
+        height: 80px;
+        justify-self: center;
+    }
+
+    header .header-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
     }
 
     header h1 {
         font-family: 'Cinzel', serif;
         color: #c8aa6e;
+        margin: 0;
+        font-size: 26px;
         letter-spacing: 3px;
         text-transform: uppercase;
-        margin-bottom: 8px;
     }
 
     header p {
+        margin: 0;
         color: #f0e6d2;
         opacity: 0.8;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     #search {
@@ -50,7 +66,7 @@ css = """
         align-items: center;
         gap: 10px;
 
-        margin: 30px auto;
+        margin: 10px auto 30px auto;
         padding: 20px;
 
         background: rgba(10, 20, 35, 0.6);
@@ -90,29 +106,29 @@ css = """
         border-color: #fff;
     }
 
-    #submitter {
-        padding: 10px 18px;
-        width: 40%;
-        min-width: 50px;
-        border-radius: 10px;
-        border: 1px solid #c8aa6e;
-
-        background: linear-gradient(135deg, #c8aa6e, #8a6f3b);
-        color: #091428;
-
-        font-weight: bold;
+    /* CHECKBOX + LABEL STYLE */
+    #search label {
+        font-family: 'Cinzel', serif;
+        color: #c8aa6e;
+        letter-spacing: 1.5px;
+        font-size: 13px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
         cursor: pointer;
+    }
 
+    /* checkbox custom */
+    #livesearcher {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #c8aa6e;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.1);
+        cursor: pointer;
+        position: relative;
         transition: 0.2s ease;
-    }
-
-    #submitter:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 18px rgba(0,0,0,.5);
-    }
-
-    #submitter:active {
-        transform: translateY(0px);
     }
 
     /* CARD CHAMPION */
@@ -270,4 +286,3 @@ css = """
             font-size: 28px;
         }
     }
-"""
