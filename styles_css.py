@@ -1,4 +1,166 @@
 css = """
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0a0a0c;
+    color: #f0e6d2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px;
+    margin: 0;
+}
+
+.champion-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 260px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.champion-item:hover {
+    z-index: 99;
+}
+
+hover-tilt::part(container) {
+    border-radius: 8px;
+}
+
+.champion-img {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+}
+
+.champion-name {
+    color: #c8aa6e;
+    font-size: 16px;
+    margin-top: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-image: linear-gradient(rgba(10, 10, 12, 0.88), rgba(10, 10, 12, 0.88)), var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #0a0a0c;
+
+    transition: background-image 0.3s ease;
+}
+
+.modal-container {
+    width: 1100px;
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-header {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.modal-header h2 {
+    color: #c8aa6e;
+    font-size: 46px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+}
+
+.modal-body {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+}
+
+.modal-left {
+    flex: 1;
+    font-size: 17px;
+    line-height: 1.8;
+    text-align: justify;
+    color: #f0e6d2;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+}
+
+.modal-right img {
+    width: 500px;
+    border-radius: 12px;
+    border: 2px solid #c8aa6e;
+}
+
+.close-btn {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    font-size: 45px;
+    color: #c8aa6e;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.close-btn:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
+
+@media (max-width: 950px) {
+    .modal-body {
+        flex-direction: column-reverse;
+        gap: 25px;
+    }
+    .modal-right img {
+        width: 100%;
+        max-width: 380px;
+    }
+    .modal-header h2 {
+        font-size: 32px;
+    }
+    .modal-left {
+        font-size: 15px;
+    }
+}
+
+
+
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
 
 body {

@@ -1,15 +1,30 @@
 import re
 import requests
+import shutil
 from bs4 import BeautifulSoup
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+
 from styles_css import css
 
 BASE_URL = "https://www.leagueoflegends.com"
-
-html_output = f"<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n<link href='./styles.css' rel='stylesheet'></head>\n<body>\n"
-
 session = requests.Session()
+
+html_output = """<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>LoL</title>
+    <link rel='stylesheet' href='styles.css'>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/hover-tilt/dist/hover-tilt.js"></script>
+    <script src='script.js' defer></script>
+</head>
+<body>
+"""
+
+# PAGE LISTE
+reponse = requests.get(f"{BASE_URL}/fr-fr/champions/")
+reponse.encoding = 'utf-8'
 
 def fetch_champion(lien):
     nom = lien.get("aria-label")
@@ -23,33 +38,32 @@ def fetch_champion(lien):
 
     description = "Description introuvable."
 
-    try:
-        r = session.get(BASE_URL + href, timeout=8)
-        if r.status_code == 200:
-            soup = BeautifulSoup(r.text, "html.parser")
-            script_data = soup.find("script", id="__NEXT_DATA__")
+    champ_page = session.get(f"{BASE_URL}{href}")
+    champ_page.encoding = 'utf-8'
 
-            if script_data:
-                match = re.search(
-                    r'"description":\{"type":"html","body":"(.*?)"\}',
-                    script_data.string
-                )
-                if match:
-                    description = match.group(1).replace("\\n", "<br>").replace('\\"', '"')
+    if champ_page.status_code == 200:
+        champ_soup = BeautifulSoup(champ_page.text, "html.parser")
+        script_data = champ_soup.find("script", id="__NEXT_DATA__")
 
-    except:
-        description = "Erreur chargement"
+        if script_data:
+            match = re.search(
+                r'"description":\{"type":"html","body":"(.*?)"\}',
+                script_data.string
+            )
+            if match:
+                description = match.group(1).replace("\\n", "<br>").replace('\\"', '"')
 
-    return nom, img_url, description
+    description_secu = description.replace("'", "&#39;")
+    nom_secu = nom.replace("'", "&#39;")
+    print(nom_propre)
 
+    return nom_secu, img_url, description_secu
 
-# PAGE LISTE CHAMPIONS
-reponse = session.get(f"{BASE_URL}/fr-fr/champions/")
-reponse.encoding = "utf-8"
 
 if reponse.status_code == 200:
-    soup = BeautifulSoup(reponse.text, "html.parser")
-    liens_champions = soup.find_all("a", href=lambda h: h and "/champions/" in h)
+    liens_champions = BeautifulSoup(reponse.text, "html.parser").find_all(
+        "a", href=lambda h: h and "/champions/" in h
+    )
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         results = executor.map(fetch_champion, liens_champions)
@@ -58,24 +72,42 @@ if reponse.status_code == 200:
             if not result:
                 continue
 
-            nom, img_url, description = result
+            nom_secu, img_url, description_secu = result
 
-            print(nom)
+            html_output += f"""
+<div class='champion-item' data-name='{nom_secu}' data-img='{img_url}' data-desc='{description_secu}'>
+  <hover-tilt shadow shadow-blur='40' scale-factor='1.25' glare-intensity='1.8'>
+    <img src='{img_url}' alt='{nom_secu}' class='champion-img'>
+  </hover-tilt>
+  <h2 class='champion-name'>{nom_secu}</h2>
+</div>
+"""
 
-            html_output += "<div class='champion-card'>\n"
-            html_output += f"  <h2>{nom}</h2>\n"
-            html_output += f"  <img src='{img_url}' alt='{nom}'>\n"
-            html_output += f"  <p class='description'>{description}</p>\n"
-            html_output += "</div>\n"
+html_output += """
+<div id="champion-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-modal" class="close-btn">&times;</span>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modal-name">Nom</h2>
+            </div>
+            <div class="modal-body">
+                <div id="modal-desc" class="modal-left">Description</div>
+                <div class="modal-right">
+                    <img id="modal-img" src="" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+"""
 
-
-html_output += "</body>\n</html>"
-
-
-# DOSSIER OUTPUT
 front_end = Path("front-end")
 front_end.mkdir(exist_ok=True)
 
-# WRITE FILES
 (front_end / "champions.html").write_text(html_output, encoding="utf-8")
 (front_end / "styles.css").write_text(css, encoding="utf-8")
+
+shutil.copy2("script.js", front_end / "script.js")
