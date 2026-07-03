@@ -7,7 +7,7 @@ html_output = """<!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>LoL Grid Ultra Scale</title>
+    <title>LoL</title>
     <link rel='stylesheet' href='style.css'>
     <script type="module" src="https://cdn.jsdelivr.net/npm/hover-tilt/dist/hover-tilt.js"></script>
     <script src='script.js' defer></script>
@@ -48,13 +48,11 @@ if reponse.status_code == 200:
                         except:
                             pass
 
-            # --- SÉCURISATION DES APOSTROPHES (CORRECTION PROBLÈME 1) ---
             description_secu = description.replace("'", "&#39;")
             nom_secu = nom.replace("'", "&#39;")
 
-            # Remplacement par ton scale-factor de 1.70
             html_output += f"<div class='champion-item' data-name='{nom_secu}' data-img='{img_url}' data-desc='{description_secu}'>\n"
-            html_output += f"  <hover-tilt shadow shadow-blur='60' scale-factor='1.70' glare-intensity='2.5'>\n"
+            html_output += f"  <hover-tilt shadow shadow-blur='40' scale-factor='1.25' glare-intensity='1.8'>\n"
             html_output += f"    <img src='{img_url}' alt='{nom_secu}' class='champion-img'>\n"
             html_output += f"  </hover-tilt>\n"
             html_output += f"  <h2 class='champion-name'>{nom_secu}</h2>\n"

@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modalImg.src = img;
             modalImg.alt = name;
 
-            // Assigne l'image à la variable CSS du fond de la modal-content
             modalContent.style.setProperty('--bg-image', `url('${img}')`);
 
             modal.classList.add('active');
